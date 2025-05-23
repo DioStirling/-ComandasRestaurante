@@ -5,6 +5,7 @@ import fs from "fs";
 
 export const dynamic = "force-dynamic";
 
+// Instância global do banco
 let dbInstance: Database | null = null;
 
 export async function getDb() {
@@ -15,6 +16,7 @@ export async function getDb() {
 
   const dbPath = path.join(dataDir, "restaurante.db");
 
+  // Abre conexão com SQLite usando sqlite3 como driver
   dbInstance = await open({
     filename: dbPath,
     driver: sqlite3.Database,
