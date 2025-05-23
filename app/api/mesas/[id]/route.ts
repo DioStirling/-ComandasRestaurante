@@ -6,11 +6,11 @@ import type { Mesa, ItemMenu } from "@/types";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const db = getDb();
-    const { id } = context.params;
+    const { id } = params;
 
     const mesaQuery = db.prepare(`
       SELECT 
@@ -78,11 +78,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const db = getDb();
-    const { id } = context.params;
+    const { id } = params;
     const { status, itens } = await request.json();
 
     const mesaExistente = db
@@ -120,7 +120,7 @@ export async function PUT(
 
       db.exec("COMMIT");
 
-      return await GET(request, context);
+      return await GET(request, { params });
     } catch (error) {
       db.exec("ROLLBACK");
       throw error;
@@ -133,11 +133,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const db = getDb();
-    const { id } = context.params;
+    const { id } = params;
 
     const mesaExistente = db
       .prepare("SELECT id FROM mesas WHERE id = ?")
