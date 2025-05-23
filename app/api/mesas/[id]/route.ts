@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import type { Mesa, ItemMenu } from "@/types";
 
-export async function GET(
+export async function GET_(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
