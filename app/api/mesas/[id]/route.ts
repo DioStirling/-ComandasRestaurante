@@ -165,3 +165,4 @@ export async function DELETE(
     return NextResponse.json({ error: "Erro ao remover mesa" }, { status: 500 });
   }
 }
+export const GET = GET_;
