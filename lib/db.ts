@@ -1,28 +1,35 @@
-import sqlite3 from "sqlite3";
-import { open, Database } from "sqlite";
+import BetterSQLite3 from "better-sqlite3";
 import path from "path";
 import fs from "fs";
 
 export const dynamic = "force-dynamic";
 
-// Instância global do banco
-let dbInstance: Database | null = null;
+const dataDir = path.join(process.cwd(), "data");
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
 
-export async function getDb() {
-  if (dbInstance) return dbInstance;
+const dbPath = path.join(dataDir, "restaurante.db");
 
-  const dataDir = path.join(process.cwd(), "data");
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+let dbInstance: BetterSQLite3.Database | null = null;
 
-  const dbPath = path.join(dataDir, "restaurante.db");
+export function getDb() {
+  if (!dbInstance) {
+    const db = new BetterSQLite3(dbPath);
+    db.pragma("foreign_keys = ON");
 
-  // Abre conexão com SQLite usando sqlite3 como driver
-  dbInstance = await open({
-    filename: dbPath,
-    driver: sqlite3.Database,
-  });
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS mesas (
+        id TEXT PRIMARY KEY,
+        numero INTEGER NOT NULL,
+        status TEXT NOT NULL,
+        hora_abertura TEXT NOT NULL,
+        total REAL DEFAULT 0
+      );
+    `);
 
-  await dbInstance.exec("PRAGMA foreign_keys = ON");
+    dbInstance = db;
+  }
 
   return dbInstance;
 }
