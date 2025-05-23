@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import type { Mesa, ItemMenu } from "@/types";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
@@ -77,7 +77,7 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
@@ -132,7 +132,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
