@@ -15,8 +15,7 @@ if (!fs.existsSync(dataDir)) {
 
 const dbPath = path.join(dataDir, "restaurante.db");
 
-// Inicializa o banco
-de dados
+// Inicializa o banco de dados
 export function initializeDatabase(): DatabaseInstance {
   if (typeof window !== "undefined") {
     throw new Error("Este código deve ser executado apenas no servidor");
