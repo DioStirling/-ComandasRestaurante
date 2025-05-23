@@ -1,5 +1,6 @@
 import BetterSQLite3 from "better-sqlite3";
-import type { Database as BetterSqliteDatabase } from "better-sqlite3";
+type BetterSqliteDatabase = ReturnType<typeof BetterSQLite3>;
+
 import path from "path";
 import fs from "fs";
 
