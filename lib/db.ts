@@ -256,7 +256,11 @@ export function initializeDatabase() {
 }
 
 // Função para obter uma instância do banco de dados
-let dbInstance: Database | null = null
+import type { Database as DatabaseType } from "better-sqlite3"
+// ...
+
+let dbInstance: DatabaseType | null = null
+
 
 export function getDb() {
   if (!dbInstance) {
