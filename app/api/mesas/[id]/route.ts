@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import type { Mesa, ItemMenu } from "@/types";
 
-export async function GET_(
+export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -165,5 +165,3 @@ export async function DELETE(
     return NextResponse.json({ error: "Erro ao remover mesa" }, { status: 500 });
   }
 }
-export const GET = GET_;
-
