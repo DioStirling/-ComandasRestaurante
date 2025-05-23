@@ -5,9 +5,8 @@ import BetterSQLite3 from "better-sqlite3";
 import path from "path";
 import fs from "fs";
 
-// Importa corretamente o tipo
-import type { Database } from "better-sqlite3";
-const DatabaseClass = BetterSQLite3;
+const Database = BetterSQLite3;
+type DatabaseInstance = InstanceType<typeof Database>;
 
 const dataDir = path.join(process.cwd(), "data");
 if (!fs.existsSync(dataDir)) {
@@ -16,12 +15,14 @@ if (!fs.existsSync(dataDir)) {
 
 const dbPath = path.join(dataDir, "restaurante.db");
 
-export function initializeDatabase(): Database {
+// Inicializa o banco
+de dados
+export function initializeDatabase(): DatabaseInstance {
   if (typeof window !== "undefined") {
     throw new Error("Este código deve ser executado apenas no servidor");
   }
 
-  const db = new DatabaseClass(dbPath);
+  const db = new Database(dbPath);
   db.pragma("foreign_keys = ON");
 
   db.exec(`
@@ -128,8 +129,12 @@ export function initializeDatabase(): Database {
       },
     ];
 
-    const insertPagamento = db.prepare("INSERT INTO historico_pagamentos (id, mesa_numero, data_pagamento, metodo_pagamento, total) VALUES (?, ?, ?, ?, ?)");
-    const insertItemHistorico = db.prepare("INSERT INTO itens_historico (id, pagamento_id, item_id, nome, preco, quantidade) VALUES (?, ?, ?, ?, ?, ?)");
+    const insertPagamento = db.prepare(
+      "INSERT INTO historico_pagamentos (id, mesa_numero, data_pagamento, metodo_pagamento, total) VALUES (?, ?, ?, ?, ?)"
+    );
+    const insertItemHistorico = db.prepare(
+      "INSERT INTO itens_historico (id, pagamento_id, item_id, nome, preco, quantidade) VALUES (?, ?, ?, ?, ?, ?)"
+    );
 
     historicoExemplo.forEach((pagamento) => {
       insertPagamento.run(
@@ -149,9 +154,9 @@ export function initializeDatabase(): Database {
   return db;
 }
 
-let dbInstance: Database | null = null;
+let dbInstance: DatabaseInstance | null = null;
 
-export function getDb(): Database {
+export function getDb(): DatabaseInstance {
   if (!dbInstance) {
     dbInstance = initializeDatabase();
   }
