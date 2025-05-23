@@ -2,11 +2,12 @@
 export const dynamic = "force-dynamic";
 
 import BetterSQLite3 from "better-sqlite3";
-import type { Database as BetterSqliteDatabase } from "better-sqlite3";
-const Database = BetterSQLite3;
-
 import path from "path";
 import fs from "fs";
+
+// Importa corretamente o tipo
+import type { Database } from "better-sqlite3";
+const DatabaseClass = BetterSQLite3;
 
 const dataDir = path.join(process.cwd(), "data");
 if (!fs.existsSync(dataDir)) {
@@ -15,13 +16,12 @@ if (!fs.existsSync(dataDir)) {
 
 const dbPath = path.join(dataDir, "restaurante.db");
 
-// Inicializa o banco
-export function initializeDatabase(): BetterSqliteDatabase {
+export function initializeDatabase(): Database {
   if (typeof window !== "undefined") {
     throw new Error("Este código deve ser executado apenas no servidor");
   }
 
-  const db = new Database(dbPath);
+  const db = new DatabaseClass(dbPath);
   db.pragma("foreign_keys = ON");
 
   db.exec(`
@@ -128,12 +128,8 @@ export function initializeDatabase(): BetterSqliteDatabase {
       },
     ];
 
-    const insertPagamento = db.prepare(
-      "INSERT INTO historico_pagamentos (id, mesa_numero, data_pagamento, metodo_pagamento, total) VALUES (?, ?, ?, ?, ?)"
-    );
-    const insertItemHistorico = db.prepare(
-      "INSERT INTO itens_historico (id, pagamento_id, item_id, nome, preco, quantidade) VALUES (?, ?, ?, ?, ?, ?)"
-    );
+    const insertPagamento = db.prepare("INSERT INTO historico_pagamentos (id, mesa_numero, data_pagamento, metodo_pagamento, total) VALUES (?, ?, ?, ?, ?)");
+    const insertItemHistorico = db.prepare("INSERT INTO itens_historico (id, pagamento_id, item_id, nome, preco, quantidade) VALUES (?, ?, ?, ?, ?, ?)");
 
     historicoExemplo.forEach((pagamento) => {
       insertPagamento.run(
@@ -153,9 +149,9 @@ export function initializeDatabase(): BetterSqliteDatabase {
   return db;
 }
 
-let dbInstance: BetterSqliteDatabase | null = null;
+let dbInstance: Database | null = null;
 
-export function getDb() {
+export function getDb(): Database {
   if (!dbInstance) {
     dbInstance = initializeDatabase();
   }
