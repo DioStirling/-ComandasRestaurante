@@ -4,10 +4,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import type { Mesa, ItemMenu } from "@/types";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+// Tipagem correta para o contexto da rota dinâmica
+interface Context {
+  params: {
+    id: string;
+  };
+}
+
+export async function GET(request: NextRequest, context: Context) {
   try {
     const db = getDb();
     const { id } = context.params;
@@ -76,10 +80,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: Context) {
   try {
     const db = getDb();
     const { id } = context.params;
@@ -131,10 +132,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: Context) {
   try {
     const db = getDb();
     const { id } = context.params;
