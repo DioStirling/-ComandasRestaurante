@@ -8,7 +8,7 @@ import fs from "fs";
 const Database = BetterSQLite3;
 type DatabaseInstance = InstanceType<typeof Database>;
 
-const dataDir = path.join(process.cwd(), "data");
+const dataDir = "/tmp";
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
